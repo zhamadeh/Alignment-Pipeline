@@ -7,7 +7,7 @@
 
 
 #Set number threads to use here:
-p=12
+p=20
 
 
 
@@ -32,9 +32,9 @@ cd /home/zhamadeh/NEW_PAPER_OLD_DATA/se_alignment_pipeline/sspipe/
 parallel --citation
 
 #aligning paired-end reads, processing, removing duplicates, and indexing
-ls /home/zhamadeh/NEW_PAPER_OLD_DATA/se_alignment_pipeline/fastq/*fastq.gz | parallel --jobs $p bash "./scripts/01-trim-adapters.sh" {}
+#ls /home/zhamadeh/NEW_PAPER_OLD_DATA/se_alignment_pipeline/fastq/*fastq.gz | parallel --jobs $p bash "./scripts/01-trim-adapters.sh" {}
 ./scripts/01-se-bowtie2-align.sh $p
-ls /home/zhamadeh/NEW_PAPER_OLD_DATA/se_alignment_pipeline/sam/*.sam | parallel --jobs $p bash "./scripts/03-sam2bam.sh" {} 
+ls /home/zhamadeh/NEW_PAPER_OLD_DATA/se_alignment_pipeline/sam/*.sam | parallel --jobs $p bash "./scripts/03-sam2bam.sh" {}
 
 
 
@@ -62,7 +62,7 @@ ls /home/zhamadeh/NEW_PAPER_OLD_DATA/se_alignment_pipeline/sorted/*.sorted | rev
 
 
 #extracting and compiling some more basic metrics
-#Rscript ./scripts/12-extract-BPR-stats.R 
+#Rscript ./scripts/12-extract-BPR-stats.R
 #bash ./scripts/13-extract-gc-insertsize-stats.sh /projects/lansdorp/for_ERIBA/sspipe/metrics/CollectInsertSizeMetrics/ /projects/lansdorp/for_ERIBA/sspipe/metrics/CollectGCBiasMetrics/ /projects/lansdorp/for_ERIBA/sspipe/metrics
 
 #compiling basic metrics into a big table
