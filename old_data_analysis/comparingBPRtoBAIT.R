@@ -6,8 +6,10 @@ library(data.table)
 
 
 ####### Niek's bed files and metadata ########
-bpr_se = read.table("breakPointSummary_se.txt",header = T)  %>% select(-c(CI.start,CI.end,genoT))
-bpr_pe = read.table("breakPointSummary_pe.txt",header = T) %>% select(-c(CI.start,CI.end,genoT))
+list.files("bpr_multipleWindows/breakpoints/",full.names = T)
+
+bpr_se = read.table("bpr/breakPointSummary_se.txt",header = T)  %>% select(-c(CI.start,CI.end,genoT))
+bpr_pe = read.table("bpr/breakPointSummary_pe.txt",header = T) %>% select(-c(CI.start,CI.end,genoT))
 
 bpr_se_1000 = read.table("bpr_multipleWindows/breakpoints/breakpoints_1000_size_se.txt",header = T)  %>% select(-c(CI.start,CI.end,genoT))
 bpr_pe_1000 = read.table("bpr_multipleWindows/breakpoints/breakpoints_1000_size_pe.txt",header = T) %>% select(-c(CI.start,CI.end,genoT))
@@ -17,6 +19,19 @@ bpr_pe_100 = read.table("bpr_multipleWindows/breakpoints/breakpoints_100_reads_s
 
 bpr_se_50 = read.table("bpr_multipleWindows/breakpoints/breakpoints_50_reads_se.txt",header = T)  %>% select(-c(CI.start,CI.end,genoT))
 bpr_pe_50 = read.table("bpr_multipleWindows/breakpoints/breakpoints_50_reads_pe.txt",header = T) %>% select(-c(CI.start,CI.end,genoT))
+
+bpr_se_200 = read.table("bpr_multipleWindows/breakpoints/breakpoints_200_reads_se.txt",header = T)  %>% select(-c(CI.start,CI.end,genoT))
+bpr_pe_200 = read.table("bpr_multipleWindows/breakpoints/breakpoints_200_reads_pe.txt",header = T) %>% select(-c(CI.start,CI.end,genoT))
+
+bpr_se_2e05 = read.table("bpr_multipleWindows/breakpoints/breakpoints_2e+05_size_se.txt",header = T)  %>% select(-c(CI.start,CI.end,genoT))
+bpr_pe_2e05 = read.table("bpr_multipleWindows/breakpoints/breakpoints_2e+05_size_pe.txt",header = T) %>% select(-c(CI.start,CI.end,genoT))
+
+bpr_se_5000 = read.table("bpr_multipleWindows/breakpoints/breakpoints_5000_size_se.txt",header = T)  %>% select(-c(CI.start,CI.end,genoT))
+bpr_pe_5000 = read.table("bpr_multipleWindows/breakpoints/breakpoints_5000_size_pe.txt",header = T) %>% select(-c(CI.start,CI.end,genoT))
+
+bpr_se_800 = read.table("bpr_multipleWindows/breakpoints/breakpoints_800_reads_se.txt",header = T)  %>% select(-c(CI.start,CI.end,genoT))
+bpr_pe_800 = read.table("bpr_multipleWindows/breakpoints/breakpoints_800_reads_pe.txt",header = T) %>% select(-c(CI.start,CI.end,genoT))
+
 
 metadata <- read.table("old_data_analysis/E-MTAB-5976.sdrf.txt",sep="\t",header=T)
 metadata <-  select(metadata,c(Comment.ENA_RUN., Extract.Name,Factor.Value.protocol., Characteristics.genotype., Characteristics.organism.))
@@ -54,7 +69,16 @@ bind3$window="100_reads"
 bind4<-rbind(bpr_se_50,bpr_pe_50)
 bind4$window="50_reads"
 
-bind<- rbind(bind1,bind2,bind3,bind4)
+bind5<-rbind(bpr_se_200,bpr_pe_200)
+bind5$window="200_reads"
+bind6<-rbind(bpr_se_2e05,bpr_pe_2e05)
+bind6$window="2e05_size"
+bind7<-rbind(bpr_se_5000,bpr_pe_5000)
+bind7$window="5000_size"
+bind8<-rbind(bpr_se_800,bpr_pe_800)
+bind8$window="800_reads"
+
+bind<- rbind(bind1,bind2,bind3,bind4,bind5,bind6,bind7,bind8)
 
 
 for (i in 1:5){
@@ -85,7 +109,7 @@ bait <- rbind(wt,blm)
 bait$window=NA
 bait$trim=NA
 
-fullDataset <- rbind(bait,bpr)
+#fullDataset <- rbind(bait,bpr)
 ##################### dataset complete #####################
 
 
@@ -231,7 +255,7 @@ for (level in levels(bpr$window)){
 
 			(TP <- length(countOverlaps(BAIT,BPR)[countOverlaps(BAIT,BPR,maxgap = i) !=0]))
 			(FN <- length(BAIT[-queryHits(findOverlaps(BAIT,BPR, type="any",maxgap = i)),]))
-			(FP <-  length(BPR[-queryHits(findOverlaps(BPR,BAIT, type="any",maxgap = i)),]))
+			(FP <-  length(BPR[-queryHits(findOverlaps(BAIT,BPR, type="any",maxgap = i)),]))
 			FNpTP=FN+TP
 			TPpFP=TP+FP
 			precision=(TP/(TP+FP))
@@ -254,7 +278,7 @@ for (level in levels(bpr$window)){
 
 			(TP <- length(countOverlaps(BAIT,BPR)[countOverlaps(BAIT,BPR,maxgap = i) !=0]))
 			(FN <- length(BAIT[-queryHits(findOverlaps(BAIT,BPR, type="any",maxgap = i)),]))
-			(FP <-  length(BPR[-queryHits(findOverlaps(BPR,BAIT, type="any",maxgap = i)),]))
+			(FP <-  length(BPR[-queryHits(findOverlaps(BAIT,BPR, type="any",maxgap = i)),]))
 			FNpTP=FN+TP
 			TPpFP=TP+FP
 			precision=(TP/(TP+FP))
@@ -270,11 +294,35 @@ prec_recall$gap<- as.factor(as.character(prec_recall$gap))
 prec_recall$level<- as.factor(as.character(prec_recall$level))
 prec_recall$sum=prec_recall$TP+prec_recall$FN+prec_recall$FP
 str(prec_recall)
+
 ggplot(prec_recall)+geom_point(aes(recall,precision,shape=gap,color=interaction(level,trim)),size=4)+
 	geom_line(aes(recall,precision,group=interaction(level,trim),color=interaction(level,trim)),size=1)+
-	scale_colour_manual(values=c("100_reads.0"="#eb4034","1000_size.0"="#1fc2a7","175_reads.0"="#a148bd" ,"50_reads.0"="#32a84e","100_reads.10"="#b8200f" ,"1000_size.10"="#10917c" ,"175_reads.10"="#64167d","50_reads.10"="#116b26"))+
+	#scale_colour_manual(values=c("100_reads.0"="#b8200f","1000_size.0"="#10917c","175_reads.0"="#64167d" ,"50_reads.0"="#116b26","100_reads.10"="#b8200f" ,"1000_size.10"="#10917c" ,"175_reads.10"="#64167d","50_reads.10"="#116b26"))+
 	xlim(0,1)+ylim(0,1)+
+	#stat_smooth(data=filter(prec_recall,gap=="0"),aes(recall,precision),method="lm",fullrange=TRUE,se=F,color="black")+
 	theme_bw()+
 	ggsave("prec-recall.png")
+
+
+reads<-filter(prec_recall,grepl("reads$", level))
+size<-filter(prec_recall,grepl("size$", level))
+
+ggplot(reads)+geom_point(aes(recall,precision,shape=gap,color=interaction(level,trim)),size=4)+
+	geom_line(aes(recall,precision,group=interaction(level,trim),color=interaction(level,trim)),size=1)+
+	scale_colour_manual(values=c("100_reads.0"="#b8200f" ,"200_reads.0"="#10917c" ,"175_reads.0"="#64167d" ,"50_reads.0"="#116b26" ,"800_reads.0"="#3248a8",
+								 "100_reads.10"="#b8200f","200_reads.10"="#10917c","175_reads.10"="#64167d","50_reads.10"="#116b26","800_reads.10"="#3248a8" ))+
+	xlim(0,1)+ylim(0,1)+
+	#stat_smooth(data=filter(reads,gap=="0"),aes(recall,precision),fullrange=TRUE,se=F,color="black")+
+	theme_bw()+
+	ggsave("Plots/reads_precRecall.png")
+ggplot(size)+geom_point(aes(recall,precision,shape=gap,color=interaction(level,trim)),size=4)+
+	geom_line(aes(recall,precision,group=interaction(level,trim),color=interaction(level,trim)),size=1)+
+	scale_colour_manual(values=c("1000_size.0"="#10917c","2e05_size.0"="#64167d" ,"5000_size.0"="#116b26" ,"1000_size.10"="#10917c","2e05_size.10"="#64167d" ,"5000_size.10"="#116b26"))+
+	xlim(0,1)+ylim(0,1)+
+	#stat_smooth(data=filter(prec_recall,gap=="0"),aes(recall,precision),method="lm",fullrange=TRUE,se=F,color="black")+
+	theme_bw()+
+	ggsave("Plots/size_precRecall.png")
+
+
 
 
