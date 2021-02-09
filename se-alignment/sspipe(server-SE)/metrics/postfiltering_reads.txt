@@ -1,2 +1,0 @@
-Library	Postfiltering_reads_aligned
-fucci_blm_c14_w5_single_3e8_S228_	5130778 
