@@ -8,37 +8,37 @@ library(data.table)
 ####### Niek's bed files and metadata ########
 list.files("bpr_multipleWindows/breakpoints/",full.names = T)
 
-bpr_se = read.table("bpr/breakPointSummary_se.txt",header = T)  %>% select(-c(CI.start,CI.end,genoT))
-bpr_pe = read.table("bpr/breakPointSummary_pe.txt",header = T) %>% select(-c(CI.start,CI.end,genoT))
+bpr_se = read.table("Breakpoint_analysis/bpr_multipleWindows/bpr-standard/breakPointSummary_se.txt",header = T)  %>% select(-c(CI.start,CI.end,genoT))
+bpr_pe = read.table("Breakpoint_analysis/bpr_multipleWindows/bpr-standard//breakPointSummary_pe.txt",header = T) %>% select(-c(CI.start,CI.end,genoT))
 
-bpr_se_1000 = read.table("bpr_multipleWindows/breakpoints/breakpoints_1000_size_se.txt",header = T)  %>% select(-c(CI.start,CI.end,genoT))
-bpr_pe_1000 = read.table("bpr_multipleWindows/breakpoints/breakpoints_1000_size_pe.txt",header = T) %>% select(-c(CI.start,CI.end,genoT))
+bpr_se_1000 = read.table("Breakpoint_analysis/bpr_multipleWindows/breakpoints/breakpoints_1000_size_se.txt",header = T)  %>% select(-c(CI.start,CI.end,genoT))
+bpr_pe_1000 = read.table("Breakpoint_analysis/bpr_multipleWindows/breakpoints/breakpoints_1000_size_pe.txt",header = T) %>% select(-c(CI.start,CI.end,genoT))
 
-bpr_se_100 = read.table("bpr_multipleWindows/breakpoints/breakpoints_100_reads_pe.txt",header = T)  %>% select(-c(CI.start,CI.end,genoT))
-bpr_pe_100 = read.table("bpr_multipleWindows/breakpoints/breakpoints_100_reads_se.txt",header = T) %>% select(-c(CI.start,CI.end,genoT))
+bpr_se_100 = read.table("Breakpoint_analysis/bpr_multipleWindows/breakpoints/breakpoints_100_reads_pe.txt",header = T)  %>% select(-c(CI.start,CI.end,genoT))
+bpr_pe_100 = read.table("Breakpoint_analysis/bpr_multipleWindows/breakpoints/breakpoints_100_reads_se.txt",header = T) %>% select(-c(CI.start,CI.end,genoT))
 
-bpr_se_50 = read.table("bpr_multipleWindows/breakpoints/breakpoints_50_reads_se.txt",header = T)  %>% select(-c(CI.start,CI.end,genoT))
-bpr_pe_50 = read.table("bpr_multipleWindows/breakpoints/breakpoints_50_reads_pe.txt",header = T) %>% select(-c(CI.start,CI.end,genoT))
+bpr_se_50 = read.table("Breakpoint_analysis/bpr_multipleWindows/breakpoints/breakpoints_50_reads_se.txt",header = T)  %>% select(-c(CI.start,CI.end,genoT))
+bpr_pe_50 = read.table("Breakpoint_analysis/bpr_multipleWindows/breakpoints/breakpoints_50_reads_pe.txt",header = T) %>% select(-c(CI.start,CI.end,genoT))
 
-bpr_se_200 = read.table("bpr_multipleWindows/breakpoints/breakpoints_200_reads_se.txt",header = T)  %>% select(-c(CI.start,CI.end,genoT))
-bpr_pe_200 = read.table("bpr_multipleWindows/breakpoints/breakpoints_200_reads_pe.txt",header = T) %>% select(-c(CI.start,CI.end,genoT))
+bpr_se_200 = read.table("Breakpoint_analysis/bpr_multipleWindows/breakpoints/breakpoints_200_reads_se.txt",header = T)  %>% select(-c(CI.start,CI.end,genoT))
+bpr_pe_200 = read.table("Breakpoint_analysis/bpr_multipleWindows/breakpoints/breakpoints_200_reads_pe.txt",header = T) %>% select(-c(CI.start,CI.end,genoT))
 
-bpr_se_2e05 = read.table("bpr_multipleWindows/breakpoints/breakpoints_2e+05_size_se.txt",header = T)  %>% select(-c(CI.start,CI.end,genoT))
-bpr_pe_2e05 = read.table("bpr_multipleWindows/breakpoints/breakpoints_2e+05_size_pe.txt",header = T) %>% select(-c(CI.start,CI.end,genoT))
+bpr_se_2e05 = read.table("Breakpoint_analysis/bpr_multipleWindows/breakpoints/breakpoints_2e+05_size_se.txt",header = T)  %>% select(-c(CI.start,CI.end,genoT))
+bpr_pe_2e05 = read.table("Breakpoint_analysis/bpr_multipleWindows/breakpoints/breakpoints_2e+05_size_pe.txt",header = T) %>% select(-c(CI.start,CI.end,genoT))
 
-bpr_se_5000 = read.table("bpr_multipleWindows/breakpoints/breakpoints_5000_size_se.txt",header = T)  %>% select(-c(CI.start,CI.end,genoT))
-bpr_pe_5000 = read.table("bpr_multipleWindows/breakpoints/breakpoints_5000_size_pe.txt",header = T) %>% select(-c(CI.start,CI.end,genoT))
+bpr_se_5000 = read.table("Breakpoint_analysis/bpr_multipleWindows/breakpoints/breakpoints_5000_size_se.txt",header = T)  %>% select(-c(CI.start,CI.end,genoT))
+bpr_pe_5000 = read.table("Breakpoint_analysis/bpr_multipleWindows/breakpoints/breakpoints_5000_size_pe.txt",header = T) %>% select(-c(CI.start,CI.end,genoT))
 
-bpr_se_800 = read.table("bpr_multipleWindows/breakpoints/breakpoints_800_reads_se.txt",header = T)  %>% select(-c(CI.start,CI.end,genoT))
-bpr_pe_800 = read.table("bpr_multipleWindows/breakpoints/breakpoints_800_reads_pe.txt",header = T) %>% select(-c(CI.start,CI.end,genoT))
+bpr_se_800 = read.table("Breakpoint_analysis/bpr_multipleWindows/breakpoints/breakpoints_800_reads_se.txt",header = T)  %>% select(-c(CI.start,CI.end,genoT))
+bpr_pe_800 = read.table("Breakpoint_analysis/bpr_multipleWindows/breakpoints/breakpoints_800_reads_pe.txt",header = T) %>% select(-c(CI.start,CI.end,genoT))
 
 
-metadata <- read.table("old_data_analysis/E-MTAB-5976.sdrf.txt",sep="\t",header=T)
+metadata <- read.table("Anxilliary/Metadata/E-MTAB-5976.sdrf.txt",sep="\t",header=T)
 metadata <-  select(metadata,c(Comment.ENA_RUN., Extract.Name,Factor.Value.protocol., Characteristics.genotype., Characteristics.organism.))
 
 #  Put all bed files in one file
 bed <- data.frame()
-for (file in list.files("nieks_bed_files/",full.names = T)){
+for (file in list.files("Benchmark_sce_files/",full.names = T)){
 	tmp <- read.table(file,sep="\t")
 	if (ncol(tmp)==4){
 		tmp$V5=tmp$V3 - tmp$V2
@@ -109,7 +109,7 @@ bait <- rbind(wt,blm)
 bait$window=NA
 bait$trim=NA
 
-#fullDataset <- rbind(bait,bpr)
+fullDataset <- rbind(bait,bpr_blm,bpr_wt)
 ##################### dataset complete #####################
 
 
@@ -188,6 +188,18 @@ ggplot(mergeOneWindowSize)+geom_jitter(aes(package,`n()`,alpha=0.1))+
 bpr_blm_V2 = bpr_blm[!bpr_blm$Extract.Name %in% blm_bpr_libsToRemove, ]
 bpr_wt_V2 = bpr_wt[!bpr_wt$Extract.Name %in% wt_bpr_libsToRemove, ]
 
+#try using only overlapping elements
+BPR <- GRanges(bpr)
+BAIT<- GRanges(bait)
+bpr_intersecting <- findOverlaps(BPR,BAIT)
+BPR[queryHits(findOverlaps(BPR,BAIT))]
+BAIT=BAIT[1:1000]
+BPR=BPR[1:1000]
+length(intersect(BPR,BAIT))
+b=length(findOverlaps(BPR,BAIT)[findOverlaps(BPR,BAIT) !=0])
+a=subsetByOverlaps(BPR,BAIT)
+setdiff(a,b)
+BPR[queryHits(findOverlaps(BPR,BAIT)),]
 
 bpr_blm_V2$package <- "BPR_BLM"
 bpr_wt_V2$package <- "BPR_WT"
