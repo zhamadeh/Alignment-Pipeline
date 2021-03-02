@@ -89,14 +89,18 @@ bind$filenames <- as.factor(bind$filenames)
 str(metadata$Comment.ENA_RUN.)
 
 bpr_merge <- merge(bind,metadata,by.x="filenames",by.y="Comment.ENA_RUN.") %>% select(-c(filenames, Factor.Value.protocol., Characteristics.organism.))
+
 bpr_wt <- filter(bpr_merge,bpr_merge$Characteristics.genotype.=="wild type genotype") %>% select(-c(Characteristics.genotype. ))
 bpr_blm <- filter(bpr_merge,bpr_merge$Characteristics.genotype.=="homozygous Blm knockout")  %>% select(-c(Characteristics.genotype. ))
+
 bpr_blm$width=bpr_blm$end-bpr_blm$start
 bpr_wt$width=bpr_wt$end-bpr_wt$start
 colnames(bpr_blm) = c("chr"   ,  "start"     ,   "end"    , "window",   "Extract.Name", "width"   )
 colnames(bpr_wt) = c("chr"   ,  "start"     ,   "end"  ,  "window",   "Extract.Name", "width"     )
+
 bpr_blm <- select(bpr_blm,c(chr,start,end,width,Extract.Name,window))
 bpr_wt <- select(bpr_wt,c(chr,start,end,width,Extract.Name,window))
+
 blm$package <- "BAIT_BS"
 wt$package <- "BAIT_WT"
 bpr_blm$package <- "BPR_BLM"
@@ -191,15 +195,9 @@ bpr_wt_V2 = bpr_wt[!bpr_wt$Extract.Name %in% wt_bpr_libsToRemove, ]
 #try using only overlapping elements
 BPR <- GRanges(bpr)
 BAIT<- GRanges(bait)
-bpr_intersecting <- findOverlaps(BPR,BAIT)
-BPR[queryHits(findOverlaps(BPR,BAIT))]
-BAIT=BAIT[1:1000]
-BPR=BPR[1:1000]
-length(intersect(BPR,BAIT))
-b=length(findOverlaps(BPR,BAIT)[findOverlaps(BPR,BAIT) !=0])
-a=subsetByOverlaps(BPR,BAIT)
-setdiff(a,b)
-BPR[queryHits(findOverlaps(BPR,BAIT)),]
+
+bpr_validated=as.data.frame(subsetByOverlaps(BPR,BAIT)) %>% select(-c(strand,window))
+colnames(bpr_validated) = c("chr" ,    "start"  ,      "end"   ,       "width"    ,    "Extract.Name" ,"package" )
 
 bpr_blm_V2$package <- "BPR_BLM"
 bpr_wt_V2$package <- "BPR_WT"
@@ -207,9 +205,10 @@ bpr_wt_V2$package <- "BPR_WT"
 bpr_blm_V3 = bpr_blm_V2[bpr_blm_V2$width < quantile(bpr_blm_V2$width , 0.95), ]
 bpr_wt_V3 = bpr_wt_V2[bpr_wt_V2$width < quantile(bpr_wt_V2$width , 0.95), ]
 
-joinV1 <- rbind(blm,wt,bpr_blm,bpr_wt)
-joinV2 <- rbind(blm,wt,bpr_blm_V2,bpr_wt_V2)
-joinV3 <- rbind(blm,wt,bpr_blm_V3,bpr_wt_V3)
+joinV1 <- rbind(bait,bpr_blm,bpr_wt)
+joinV1 <- rbind(bait,bpr_validated)
+joinV2 <- rbind(bait,bpr_blm_V2,bpr_wt_V2)
+joinV3 <- rbind(bait,bpr_blm_V3,bpr_wt_V3)
 
 
 ggplot(joinV1, aes(width)) + stat_ecdf(geom = "step",aes(group=package,color=package)) +
@@ -229,7 +228,7 @@ fullDataset$package<- as.factor(fullDataset$package)
 fullDataset$window<-as.factor(fullDataset$window)
 fullDataset$trim <-as.factor(fullDataset$trim )
 
-ggplot(fullDataset, aes(width)) + stat_ecdf(geom = "step",aes(group=interaction(package,window,trim),color=interaction(package,window,trim))) +
+ggplot(fullDataset, aes(width)) + stat_ecdf(geom = "step",aes(group=interaction(package,window),color=interaction(package,window))) +
 	#geom_density(aes(group=package,color=package))+
 	scale_x_log10() + labs(x="Resolution",y="Cumulative density") +
 	theme_classic()# + ggsave("resolution_V3")
@@ -307,6 +306,7 @@ prec_recall$level<- as.factor(as.character(prec_recall$level))
 prec_recall$sum=prec_recall$TP+prec_recall$FN+prec_recall$FP
 str(prec_recall)
 
+prec_recall<-prec_recall %>% filter(grepl("reads$", level)) %>% filter(trim=="10")
 ggplot(prec_recall)+geom_point(aes(recall,precision,shape=gap,color=interaction(level,trim)),size=4)+
 	geom_line(aes(recall,precision,group=interaction(level,trim),color=interaction(level,trim)),size=1)+
 	#scale_colour_manual(values=c("100_reads.0"="#b8200f","1000_size.0"="#10917c","175_reads.0"="#64167d" ,"50_reads.0"="#116b26","100_reads.10"="#b8200f" ,"1000_size.10"="#10917c" ,"175_reads.10"="#64167d","50_reads.10"="#116b26"))+
@@ -316,7 +316,10 @@ ggplot(prec_recall)+geom_point(aes(recall,precision,shape=gap,color=interaction(
 	ggsave("prec-recall.png")
 
 
+
+
 reads<-filter(prec_recall,grepl("reads$", level))
+
 size<-filter(prec_recall,grepl("size$", level))
 
 ggplot(reads)+geom_point(aes(recall,precision,shape=gap,color=interaction(level,trim)),size=4)+
